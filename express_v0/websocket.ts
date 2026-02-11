@@ -77,12 +77,14 @@ export function setupWebSocket(server: HttpServer): WebSocketServer {
   });
 
   
+  type WebSocketWithAlive = WebSocket & { [key: symbol]: boolean };
   const interval = setInterval(function ping() {
-    wss.clients.forEach(function each(ws: WebSocket & { [key: symbol]: boolean }) {
-      if (ws[IS_ALIVE] === false) {
+    wss.clients.forEach(function each(ws: WebSocket) {
+      const ext = ws as WebSocketWithAlive;
+      if (ext[IS_ALIVE] === false) {
         return ws.terminate();
       }
-      ws[IS_ALIVE] = false;
+      ext[IS_ALIVE] = false;
       ws.ping();
     });
   }, 30000);
