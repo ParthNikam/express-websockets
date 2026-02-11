@@ -1,57 +1,71 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Express WebSocket Demo</title>
+    <title>Login - WebSocket Chat</title>
     <style>
       body {
         font-family: Arial, sans-serif;
         margin: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
       }
-      #messages {
-        border: 1px solid #ccc;
-        height: 300px;
-        overflow-y: scroll;
-        padding: 10px;
-        margin-bottom: 10px;
+      label {
+        font-weight: bold;
       }
-      #messageInput {
-        width: 300px;
-        padding: 5px;
+      input {
+        padding: 6px 8px;
+        font-size: 14px;
       }
       button {
-        padding: 5px 10px;
+        padding: 6px 12px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .error {
+        color: #c00;
+        font-size: 13px;
       }
     </style>
   </head>
   <body>
-    <h1>Express WebSocket Demo</h1>
-    <div id="messages"></div>
-    <input type="text" id="messageInput" placeholder="Enter your message" />
-    <button onclick="sendMessage()">Send Message</button>
+    <h1>WebSocket Chat - Login</h1>
+    <p>Enter a username to join the chat.</p>
+    <label for="userName">Username</label>
+    <input type="text" id="userName" placeholder="Enter your name" />
+    <button onclick="handleLogin()">Join Chat</button>
+    <p id="error" class="error"></p>
+
     <script>
-      const ws = new WebSocket(`${location.origin.replace('http', 'ws')}`);
-      const messages = document.getElementById('messages');
+      function handleLogin() {
+        const input = document.getElementById('userName');
+        const errorEl = document.getElementById('error');
+        const name = input.value.trim();
 
-      ws.onmessage = function (event) {
-        const messageDiv = document.createElement('div');
-        messageDiv.textContent = event.data;
-        messages.appendChild(messageDiv);
-        messages.scrollTop = messages.scrollHeight;
-      };
-
-      function sendMessage() {
-        const input = document.getElementById('messageInput');
-        if (input.value) {
-          ws.send(input.value);
-          input.value = '';
+        if (!name) {
+          errorEl.textContent = 'Please enter a username.';
+          return;
         }
+
+        // Clear any previous error
+        errorEl.textContent = '';
+
+        // Save username for the chat page
+        localStorage.setItem('chatUsername', name);
+
+        // Go to the chat page
+        window.location.href = 'chat.html';
       }
 
-      document.getElementById('messageInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-          sendMessage();
-        }
-      });
+      // Allow Enter key to submit
+      document
+        .getElementById('userName')
+        .addEventListener('keypress', function (e) {
+          if (e.key === 'Enter') {
+            handleLogin();
+          }
+        });
     </script>
   </body>
 </html>
