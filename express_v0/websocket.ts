@@ -51,7 +51,9 @@ export function setupWebSocket(server: HttpServer): WebSocketServer {
       try {
         const messageText = data.toString();
         console.log('Received: ', messageText);
-        connectionManager.broadcast(`User says: ${messageText}`);
+        // Frontend already prefixes with `${username}: message`,
+        // so just broadcast the raw text.
+        connectionManager.broadcast(messageText);
       } catch (error) {
         console.error('Error processing message: ', error);
       }
@@ -76,7 +78,7 @@ export function setupWebSocket(server: HttpServer): WebSocketServer {
     });
   });
 
-  
+
   type WebSocketWithAlive = WebSocket & { [key: symbol]: boolean };
   const interval = setInterval(function ping() {
     wss.clients.forEach(function each(ws: WebSocket) {
