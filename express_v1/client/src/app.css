@@ -1,0 +1,21 @@
+
+:root {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400; /* Default weight */
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit; /* Inherit from :root */
+}
+
+/* Default styling for headings if desired, using Google Sans if preferred for headings, or Open Sans for everything */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Google Sans", "Open Sans", sans-serif;
+}
